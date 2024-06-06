@@ -2,6 +2,7 @@
 
 'use strict';
 
+const { filter } = require('lodash');
 var customers = require('./data/customers.json');
 var _ = require('underbar');
 
@@ -22,7 +23,13 @@ var _ = require('underbar');
  */
 
 var maleCount = function(array) {
-
+    return _.filter(array, (element) => {
+        if (element.gender === "male") {
+            return true
+        } else {
+            return false
+        }
+    })
 };
 
 var femaleCount;
