@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { filter } = require('lodash');
+const { filter, toNumber } = require('lodash');
 var customers = require('./data/customers.json');
 var _ = require('underbar');
 
@@ -23,26 +23,88 @@ var _ = require('underbar');
  */
 
 var maleCount = function(array) {
-    return _.filter(array, (element) => {
+    let maleArray = _.filter(array, (element) => {
         if (element.gender === "male") {
             return true
         } else {
             return false
         }
     })
+    return maleArray.length
 };
 
-var femaleCount;
+var femaleCount = function(array) {
+    let femaleArray = _.filter(array, (element) => {
+        if (element.gender === "female") {
+            return true
+        } else {
+            return false
+        }
+    })
+    return femaleArray.length
+};
 
-var oldestCustomer;
+var oldestCustomer = function(arr) {
+    let currentOldest = {age: 0, name: null};
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].age > currentOldest.age) {
+            currentOldest.age = arr[i].age;
+            currentOldest.name = arr[i].name;
+        }
+    }
+    return currentOldest.name;
+};
 
-var youngestCustomer;
+var youngestCustomer = function(arr) {
+    let currentYoungest = {age: arr[0].age, name: arr[0].name};
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i].age < currentYoungest.age) {
+            currentYoungest.age = arr[i].age;
+            currentYoungest.name = arr[i].name;
+        }
+    }
+    return currentYoungest.name;
+};
 
-var averageBalance;
+var averageBalance = (arr) => {
+    let balances = _.pluck(arr, "balance");
+    balances = _.map(balances, (element) => {
+        let temp = element;
+        temp = temp.replace("$", "");
+        temp = temp.replace(",", "");
+        temp = toNumber(temp);
+        return temp;
+        })
+    let total = 0
+    for (let i = 0; i < balances.length; i++) {
+        total += balances[i]
+    }
+    total /= balances.length
+    return total
+};
 
-var firstLetterCount;
+var firstLetterCount = (arr, letter) => {
+    let guideLetter = letter.toUpperCase();
+    let names = _.pluck(arr, "name");
+    let firstLetters = _.map(names, (element) => {
+        let temp = element;
+        temp = temp.slice(0, 1)
+        temp = temp.toUpperCase();
+        return temp;
+    })
+    let theLettersWereLookingFor = _.filter(firstLetters, (element) => {
+        if (element === guideLetter) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+    return theLettersWereLookingFor.length;
+};
 
-var friendFirstLetterCount;
+var friendFirstLetterCount = (arr, customerName) => {
+    
+};
 
 var friendsCount;
 
