@@ -135,7 +135,32 @@ var friendsCount = (arr, customerName) => {
     return output
 };
 
-var topThreeTags;
+var topThreeTags = (arr) => {
+    let output = [];
+    let counter = {};
+    let tags = _.pluck(arr, "tags")
+    tags = tags.flat(1);
+    for (let i = 0; i < tags.length; i++) {
+        if (counter[tags[i]]) {
+            counter[tags[i]]++
+        } else {
+            counter[tags[i]] = 1;
+        }
+    }
+    let currentBiggestValue;
+    for (let i = 0; i < 3; i++) {
+        currentBiggestValue = {key: null, num: 0};
+        for (let tag in counter) {
+            if (counter[tag] > currentBiggestValue.num) {
+                currentBiggestValue.key = tag;
+                currentBiggestValue.num = counter[tag];
+            }
+        }
+        delete counter[currentBiggestValue.key];
+        output.push(currentBiggestValue.key)
+    }
+    return output;
+};
 
 var genderCount = (arr) => {
     let output = {
@@ -144,7 +169,7 @@ var genderCount = (arr) => {
         'non-binary': 0,
     }
     let genders = _.pluck(arr, "gender")
-    for (let i = 0; i < genders.length; i++) {
+    /*for (let i = 0; i < genders.length; i++) {
         if (genders[i] === "male") {
             output.male++
         }
@@ -154,7 +179,19 @@ var genderCount = (arr) => {
         if (genders[i] === "non-binary") {
             output['non-binary']++
         }
-    }
+    } */
+    output = _.reduce(genders, (output, element) => {
+        if (element === "male") {
+            output.male++
+        }
+        if (element === "female") {
+            output.female++
+        }
+        if (element === "non-binary") {
+            output['non-binary']++
+        }
+        return output
+    }, output);
     return output;
 };
 
