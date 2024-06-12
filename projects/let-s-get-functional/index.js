@@ -102,15 +102,61 @@ var firstLetterCount = (arr, letter) => {
     return theLettersWereLookingFor.length;
 };
 
-var friendFirstLetterCount = (arr, customerName) => {
-    
+var friendFirstLetterCount = (arr, customerName, letter) => {
+    let customer = {};
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].name === customerName) {
+            customer = arr[i];
+        }
+    }
+    let guideLetter = letter.toUpperCase();
+    let friends = customer.friends
+    friends = _.pluck(friends, "name")
+    let count = 0;
+    for (let i = 0; i < friends.length; i++) {
+        if (friends[i].slice(0, 1).toUpperCase() === guideLetter) {
+            count++
+        }
+    }
+    return count;
 };
 
-var friendsCount;
+var friendsCount = (arr, customerName) => {
+    let output = [];
+    let friends = _.pluck(arr, "friends")
+    for (let i = 0; i < friends.length; i++) {
+        friends[i] = _.pluck(friends[i], "name");
+    }
+    for (let i = 0; i < friends.length; i++) {
+        if (_.contains(friends[i], customerName)) {
+            output.push(arr[i].name)
+        }
+    }
+    return output
+};
 
 var topThreeTags;
 
-var genderCount;
+var genderCount = (arr) => {
+    let output = {
+        male: 0,
+        female: 0,
+        'non-binary': 0,
+    }
+    let genders = _.pluck(arr, "gender")
+    for (let i = 0; i < genders.length; i++) {
+        if (genders[i] === "male") {
+            output.male++
+        }
+        if (genders[i] === "female") {
+            output.female++
+        }
+        if (genders[i] === "non-binary") {
+            output['non-binary']++
+        }
+    }
+    return output;
+};
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
